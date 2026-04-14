@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kupuri | Renta de Audio CDMX</title>
+  <meta name="description" content="Kupuri — Renta profesional de equipo de audio para eventos, cine, teatro y producciones en la Ciudad de México." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:    #c9a84c;
+      --gold-lt: #e8c97a;
+      --bg:      #07070a;
+      --surface: #0f0f14;
+      --surface2:#17171f;
+      --text:    #e8e6e0;
+      --muted:   #7a7870;
+      --white:   #ffffff;
+      --radius:  8px;
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* =============================================
+       SCROLLBAR
+    ============================================= */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+    /* =============================================
+       UTILITIES
+    ============================================= */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .gold { color: var(--gold); }
+    .section-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--bg);
+    }
+    .btn-primary:hover {
+      background: var(--gold-lt);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(201,168,76,0.35);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-2px);
+    }
+    .divider {
+      width: 56px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin-bottom: 24px;
+    }
+
+    /* =============================================
+       NOISE OVERLAY
+    ============================================= */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* =============================================
+       NAVBAR
+    ============================================= */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 0;
+      transition: background var(--transition), padding var(--transition), border-color var(--transition);
+      border-bottom: 1px solid transparent;
+    }
+    #navbar.scrolled {
+      background: rgba(7,7,10,0.92);
+      backdrop-filter: blur(12px);
+      padding: 14px 0;
+      border-bottom-color: rgba(201,168,76,0.12);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { font-size: 0.82rem !important; color: var(--gold) !important; }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--text);
+      transition: var(--transition);
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--text);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-close {
+      position: absolute;
+      top: 28px; right: 28px;
+      font-size: 1.5rem;
+      color: var(--muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    /* =============================================
+       HERO
+    ============================================= */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.06) 0%, transparent 60%),
+                  radial-gradient(ellipse 40% 40% at 80% 80%, rgba(60,80,160,0.07) 0%, transparent 60%),
+                  linear-gradient(180deg, #07070a 0%, #0c0c12 100%);
+    }
+    /* Animated waveform lines */
+    .waveform {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 180px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 3px;
+      padding: 0 10%;
+      opacity: 0.18;
+    }
+    .wave-bar {
+      width: 3px;
+      border-radius: 2px 2px 0 0;
+      background: linear-gradient(to top, var(--gold), transparent);
+      animation: wavePulse var(--dur, 1.4s) ease-in-out infinite alternate;
+      animation-delay: var(--delay, 0s);
+    }
+    @keyframes wavePulse {
+      from { height: var(--min, 20px); }
+      to   { height: var(--max, 80px); }
+    }
+    /* Film grain scanlines */
+    .scanlines {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.04) 2px,
+        rgba(0,0,0,0.04) 4px
+      );
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 120px 0 80px;
+    }
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+    .hero-eyebrow span {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 80px;
+      padding-top: 48px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+    .stat-value span { color: var(--gold); }
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    /* Floating audio card */
+    .hero-visual {
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      opacity: 0;
+      animation: fadeLeft 1s 0.7s forwards;
+    }
+    .audio-card {
+      background: var(--surface);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 16px;
+      padding: 28px 24px;
+      width: 260px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,168,76,0.06);
+    }
+    .audio-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .audio-icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), #7a5c1a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .audio-card-title { font-size: 0.85rem; font-weight: 600; }
+    .audio-card-sub { font-size: 0.72rem; color: var(--muted); }
+    .mini-wave {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      height: 36px;
+      margin-bottom: 16px;
+    }
+    .mini-bar {
+      width: 4px;
+      background: var(--gold);
+      border-radius: 2px;
+      opacity: 0.7;
+      animation: miniPulse var(--dur2, 0.8s) ease-in-out infinite alternate;
+      animation-delay: var(--d2, 0s);
+    }
+    @keyframes miniPulse {
+      from { height: 6px; opacity: 0.4; }
+      to   { height: var(--h, 28px); opacity: 1; }
+    }
+    .audio-card-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .dot-live {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(74,222,128,0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeLeft {
+      from { opacity: 0; transform: translate(30px, -50%); }
+      to   { opacity: 1; transform: translate(0, -50%); }
+    }
+
+    /* =============================================
+       MARQUEE STRIP
+    ============================================= */
+    .marquee-section {
+      background: var(--surface);
+      border-top: 1px solid rgba(201,168,76,0.1);
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+      padding: 16px 0;
+      overflow: hidden;
+    }
+    .marquee-track {
+      display: flex;
+      gap: 60px;
+      white-space: nowrap;
+      animation: marquee 24s linear infinite;
+    }
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .marquee-item svg { color: var(--gold); }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* =============================================
+       SERVICES
+    ============================================= */
+    #servicios {
+      padding: 120px 0;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 36px 30px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .service-card:hover {
+      border-color: rgba(201,168,76,0.25);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .service-card:hover::before { opacity: 1; }
+    .service-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      background: rgba(201,168,76,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+    }
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .service-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border-radius: 30px;
+      background: rgba(201,168,76,0.08);
+      color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+
+    /* =============================================
+       EQUIPMENT SHOWCASE
+    ============================================= */
+    #equipo {
+      padding: 120px 0;
+      background: var(--surface);
+    }
+    .equipo-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .equipo-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .equipo-text p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
+    .equipo-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+    .equipo-list li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.9rem;
+    }
+    .check {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--gold);
+      font-size: 0.7rem;
+    }
+    /* Visual panel */
+    .equipo-visual {
+      position: relative;
+    }
+    .mixer-graphic {
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    }
+    .mixer-top {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .channel-strip {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .fader-track {
+      width: 4px;
+      height: 120px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px;
+      position: relative;
+    }
+    .fader-thumb {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 8px;
+      background: linear-gradient(135deg, #ddd, #888);
+      border-radius: 2px;
+    }
+    .ch-label {
+      font-size: 0.6rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .ch-knob {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(201,168,76,0.4);
+      background: radial-gradient(circle at 40% 40%, #2a2a30, #111);
+    }
+    .ch-vu {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.05);
+    }
+    .ch-vu-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4ade80, var(--gold), #ef4444);
+      border-radius: 3px;
+      animation: vuMeter var(--vu-dur, 1.5s) ease-in-out infinite alternate;
+    }
+    @keyframes vuMeter {
+      from { width: 30%; }
+      to   { width: var(--vu-max, 75%); }
+    }
+    .mixer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand-badge {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+    }
+    .led-row {
+      display: flex;
+      gap: 6px;
+    }
+    .led {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .led-green { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+    .led-yellow { background: var(--gold); box-shadow: 0 0 6px var(--gold); }
+    .led-red { background: #f87171; box-shadow: 0 0 6px #f87171; }
+    /* Floating badge */
+    .float-badge {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      background: var(--gold);
+      color: var(--bg);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.3;
+      box-shadow: 0 16px 40px rgba(201,168,76,0.35);
+    }
+    .float-badge strong { display: block; font-size: 1.4rem; }
+
+    /* =============================================
+       PROCESS
+    ============================================= */
+    #proceso {
+      padding: 120px 0;
+    }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 80px;
+      right: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+    }
+    .step {
+      text-align: center;
+      position: relative;
+    }
+    .step-num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      background: var(--bg);
+      position: relative;
+      z-index: 1;
+    }
+    .step-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .step-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* =============================================
+       TESTIMONIALS
+    ============================================= */
+    #testimonios {
+      padding: 120px 0;
+      background: var(--surface);
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testimonial-card {
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 32px;
+      transition: var(--transition);
+    }
+    .testimonial-card:hover {
+      border-color: rgba(201,168,76,0.2);
+      transform: translateY(-4px);
+    }
+    .stars {
+      color: var(--gold);
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+    .testimonial-text {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .author-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), #3c2a05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--bg);
+      flex-shrink: 0;
+    }
+    .author-name { font-size: 0.85rem; font-weight: 600; }
+    .author-role { font-size: 0.75rem; color: var(--muted); }
+
+    /* =============================================
+       CONTACT
+    ============================================= */
+    #contacto {
+      padding: 120px 0;
+    }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .contact-info p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .contact-item-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .contact-item-text { font-size: 0.85rem; color: var(--muted); }
+    .contact-item-val { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+    /* Form */
+    .contact-form {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 40px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color var(--transition);
+      appearance: none;
+    }
+    .form-group select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7870' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: rgba(201,168,76,0.5);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-full { grid-column: 1 / -1; }
+    .form-submit { width: 100%; justify-content: center; margin-top: 4px; }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 60px 0 32px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+    .footer-brand p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 14px 0 24px;
+      max-width: 280px;
+    }
+    .social-links {
+      display: flex;
+      gap: 12px;
+    }
+    .social-link {
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+    .social-link:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201,168,76,0.08);
+    }
+    .footer-col h4 {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 12px; }
+    .footer-col ul li a {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .footer-bottom p {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .footer-bottom a { color: var(--gold); text-decoration: none; }
+
+    /* =============================================
+       ANIMATIONS ON SCROLL
+    ============================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 1024px) {
+      .hero-visual { display: none; }
+      .equipo-inner { grid-template-columns: 1fr; gap: 48px; }
+      .process-steps { grid-template-columns: repeat(2, 1fr); }
+      .process-steps::before { display: none; }
+      .testimonials-grid { grid-template-columns: 1fr 1fr; }
+      .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-stats { gap: 28px; flex-wrap: wrap; }
+      .services-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .mixer-top { gap: 6px; }
+    }
+    @media (max-width: 480px) {
+      .hero-title { font-size: 2.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <nav id="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">KU<span>PU</span>RI</a>
+      <ul class="nav-links">
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#equipo">Equipo</a></li>
+        <li><a href="#proceso">Proceso</a></li>
+        <li><a href="#testimonios">Clientes</a></li>
+        <li><a href="#contacto" class="nav-cta">Cotizar</a></li>
+      </ul>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose" aria-label="Cerrar menú">✕</button>
+    <a href="#servicios" class="mobile-link">Servicios</a>
+    <a href="#equipo" class="mobile-link">Equipo</a>
+    <a href="#proceso" class="mobile-link">Proceso</a>
+    <a href="#testimonios" class="mobile-link">Clientes</a>
+    <a href="#contacto" class="mobile-link">Cotizar</a>
+  </div>
+
+  <!-- ==================== HERO ==================== -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="scanlines"></div>
+
+    <!-- Waveform bars -->
+    <div class="waveform" id="waveform"></div>
+
+    <div class="container hero-content">
+      <div class="hero-eyebrow">
+        <span>Renta Profesional de Audio · CDMX</span>
+      </div>
+      <h1 class="hero-title">
+        Sonido que<br />
+        <em>mueve</em> al mundo
+      </h1>
+      <p class="hero-subtitle">
+        Equipo de audio cinematográfico de primer nivel para eventos, producciones,
+        teatro y experiencias en vivo. Desde la pre‑producción hasta el último acorde.
+      </p>
+      <div class="hero-actions">
+        <a href="#contacto" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.68h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.75-.75a2 2 0 0 1 2.11-.45c.905.342 1.846.573 2.81.69A2 2 0 0 1 22 17.18v-.26z"/></svg>
+          Solicitar cotización
+        </a>
+        <a href="#servicios" class="btn btn-outline">Ver servicios</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-value">12<span>+</span></div>
+          <div class="stat-label">Años de experiencia</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">500<span>+</span></div>
+          <div class="stat-label">Eventos realizados</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">50<span>+</span></div>
+          <div class="stat-label">Marcas premium</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">24<span>/7</span></div>
+          <div class="stat-label">Soporte técnico</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating audio card -->
+    <div class="hero-visual">
+      <div class="audio-card">
+        <div class="audio-card-header">
+          <div class="audio-icon">🎚️</div>
+          <div>
+            <div class="audio-card-title">Sistema en vivo</div>
+            <div class="audio-card-sub">Allen &amp; Heath SQ‑6</div>
+          </div>
+        </div>
+        <div class="mini-wave" id="miniWave"></div>
+        <div class="audio-card-status">
+          <span class="dot-live"></span>
+          Disponible ahora
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MARQUEE ==================== -->
+  <div class="marquee-section" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <!-- ==================== SERVICES ==================== -->
+  <section id="servicios">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Lo que hacemos</span>
+        <h2 class="section-title">Soluciones de audio para <em class="gold">cada escena</em></h2>
+        <p class="section-desc">Desde un cóctel íntimo hasta un festival masivo, contamos con el inventario y la experiencia para cubrirte.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-icon">🎤</div>
+          <div class="service-name">Audio para Eventos</div>
+          <p class="service-desc">Sistemas line‑array, monitores de piso, consolas digitales y operadores certificados para bodas, congresos, fiestas y conciertos.</p>
+          <div class="service-tags">
+            <span class="tag">Line Array</span>
+            <span class="tag">Subwoofers</span>
+            <span class="tag">IEM</span>
+          </div>
+        </div>
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-icon">🎬</div>
+          <div class="service-name">Producción Cinematográfica</div>
+          <p class="service-desc">Grabación en set, boom poles, micrófonos shotgun, sistemas de lavalieres y monitoreo crítico para cine, series y publicidad.</p>
+          <div class="service-tags">
+            <span class="tag">Location Sound</span>
+            <span class="tag">Boom</span>
+            <span class="tag">Timecode</span>
+          </div>
+        </div>
+        <div class="service-card reveal reveal-delay-3">
+          <div class="service-icon">🎭</div>
+          <div class="service-name">Teatro y Artes Escénicas</div>
+          <p class="service-desc">Diseño de sonido para teatro, ópera y danza. Sistemas discretos, mixing en vivo y efectos sonoros en tiempo real.</p>
+          <div class="service-tags">
+            <span class="tag">Shure Axient</span>
+            <span class="tag">Digico SD</span>
+            <span class="tag">Dante</span>
+          </div>
+        </div>
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-icon">📡</div>
+          <div class="service-name">Transmisión en Vivo</div>
+          <p class="service-desc">Integración con plataformas de streaming, interfaces de audio para broadcast y mezcla híbrida presencial/remota.</p>
+          <div class="service-tags">
+            <span class="tag">Streaming</span>
+            <span class="tag">Broadcast</span>
+            <span class="tag">NDI</span>
+          </div>
+        </div>
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-icon">🏢</div>
+          <div class="service-name">Instalaciones Corporativas</div>
+          <p class="service-desc">Salas de juntas, auditorios y espacios de exhibición con sistemas de conferencia, AV y control centralizado.</p>
+          <div class="service-tags">
+            <span class="tag">Conferencia</span>
+            <span class="tag">AV Integration</span>
+            <span class="tag">Control</span>
+          </div>
+        </div>
+        <div class="service-card reveal reveal-delay-3">
+          <div class="service-icon">🛠️</div>
+          <div class="service-name">Soporte Técnico</div>
+          <p class="service-desc">Técnicos de sonido con más de 10 años de experiencia, disponibles desde el montaje hasta el desmontaje final.</p>
+          <div class="service-tags">
+            <span class="tag">24/7</span>
+            <span class="tag">On-site</span>
+            <span class="tag">FOH/MON</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== EQUIPMENT ==================== -->
+  <section id="equipo">
+    <div class="container">
+      <div class="equipo-inner">
+        <div class="equipo-text reveal">
+          <span class="section-label">Inventario premium</span>
+          <div class="divider"></div>
+          <h2>Equipo que los<br /><em class="gold">profesionales eligen</em></h2>
+          <p>Nuestro inventario incluye las marcas más respetadas de la industria. Todo mantenido, calibrado y listo para el escenario.</p>
+          <ul class="equipo-list">
+            <li><span class="check">✓</span> <span>L‑Acoustics, d&b audiotechnik, Meyer Sound</span></li>
+            <li><span class="check">✓</span> <span>DiGiCo, Avid S21, Allen &amp; Heath, SSL Live</span></li>
+            <li><span class="check">✓</span> <span>Shure Axient Digital, Sennheiser Digital 6000</span></li>
+            <li><span class="check">✓</span> <span>Sound Devices, Zaxcom, Lectrosonics</span></li>
+            <li><span class="check">✓</span> <span>Lab.gruppen, Crown, QSC amplificadores</span></li>
+          </ul>
+          <a href="#contacto" class="btn btn-primary">Consultar disponibilidad</a>
+        </div>
+
+        <div class="equipo-visual reveal reveal-delay-2">
+          <div class="mixer-graphic">
+            <div class="mixer-top" id="mixerChannels"></div>
+            <div class="mixer-bottom">
+              <span class="brand-badge">KUPURI</span>
+              <div class="led-row">
+                <div class="led led-green"></div>
+                <div class="led led-green"></div>
+                <div class="led led-yellow"></div>
+                <div class="led led-red"></div>
+              </div>
+            </div>
+          </div>
+          <div class="float-badge">
+            <strong>50+</strong>
+            marcas en<br />inventario
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PROCESS ==================== -->
+  <section id="proceso">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Cómo trabajamos</span>
+        <h2 class="section-title">Tu evento, paso a paso</h2>
+        <p class="section-desc">Un proceso claro para que llegues el día del evento sin sorpresas.</p>
+      </div>
+
+      <div class="process-steps">
+        <div class="step reveal reveal-delay-1">
+          <div class="step-num">01</div>
+          <div class="step-title">Consulta inicial</div>
+          <p class="step-desc">Nos cuentas los detalles: lugar, tipo de evento, fechas y necesidades técnicas específicas.</p>
+        </div>
+        <div class="step reveal reveal-delay-2">
+          <div class="step-num">02</div>
+          <div class="step-title">Propuesta técnica</div>
+          <p class="step-desc">Diseñamos el rider de audio personalizado y enviamos cotización detallada sin cargos ocultos.</p>
+        </div>
+        <div class="step reveal reveal-delay-3">
+          <div class="step-num">03</div>
+          <div class="step-title">Montaje y pruebas</div>
+          <p class="step-desc">Llegamos con anticipación, instalamos el sistema y realizamos sound check completo.</p>
+        </div>
+        <div class="step reveal reveal-delay-4">
+          <div class="step-num">04</div>
+          <div class="step-title">Operación y desmontaje</div>
+          <p class="step-desc">Cobertura técnica durante todo el evento y desmontaje ordenado al finalizar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TESTIMONIALS ==================== -->
+  <section id="testimonios">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Clientes</span>
+        <h2 class="section-title">Lo que dicen de <em class="gold">Kupuri</em></h2>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card reveal reveal-delay-1">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"El sonido en nuestra premiere fue impecable. El equipo de Kupuri llegó horas antes, chequeó cada detalle y el resultado fue cinematográfico de verdad."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">AM</div>
+            <div>
+              <div class="author-name">Alejandra Morales</div>
+              <div class="author-role">Productora ejecutiva · Estudio 5</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-delay-2">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"Rentamos para un festival de jazz de 3 días. El line array L‑Acoustics sonó perfectamente en todas las condiciones climáticas. Excelente servicio."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">RC</div>
+            <div>
+              <div class="author-name">Rodrigo Cervantes</div>
+              <div class="author-role">Director artístico · Jazz CDMX</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-delay-3">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"Para la telenovela necesitábamos location sound de alto nivel. Kupuri nos proveyó el kit completo de Sound Devices y un mixer excepcional."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">VL</div>
+            <div>
+              <div class="author-name">Valeria Luna</div>
+              <div class="author-role">Coord. de producción · Televisa Studios</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT ==================== -->
+  <section id="contacto">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="contact-info reveal">
+          <span class="section-label">Hablemos</span>
+          <div class="divider"></div>
+          <h2>Cotiza tu<br /><em class="gold">próximo proyecto</em></h2>
+          <p>Cuéntanos sobre tu evento o producción y te enviamos una propuesta técnica y económica en menos de 24 horas.</p>
+          <div class="contact-details">
+            <div class="contact-item">
+              <div class="contact-item-icon">📍</div>
+              <div>
+                <div class="contact-item-text">Ubicación</div>
+                <div class="contact-item-val">Ciudad de México, CDMX · México</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">📞</div>
+              <div>
+                <div class="contact-item-text">Teléfono / WhatsApp</div>
+                <div class="contact-item-val">+52 55 1234 5678</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">✉️</div>
+              <div>
+                <div class="contact-item-text">Correo electrónico</div>
+                <div class="contact-item-val">hola@kupuri.mx</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">🕐</div>
+              <div>
+                <div class="contact-item-text">Horario de atención</div>
+                <div class="contact-item-val">Lun – Vie · 9:00 – 20:00</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form reveal reveal-delay-2">
+          <form id="contactForm" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+              </div>
+              <div class="form-group">
+                <label for="empresa">Empresa / Productora</label>
+                <input type="text" id="empresa" name="empresa" placeholder="Opcional" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" placeholder="tu@email.com" required />
+              </div>
+              <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="+52 55 ..." />
+              </div>
+            </div>
+            <div class="form-group form-full">
+              <label for="tipo">Tipo de evento</label>
+              <select id="tipo" name="tipo" required>
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="evento">Evento social / corporativo</option>
+                <option value="concierto">Concierto / Festival</option>
+                <option value="cine">Producción cinematográfica</option>
+                <option value="teatro">Teatro / Artes escénicas</option>
+                <option value="streaming">Transmisión en vivo</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+            <div class="form-group form-full">
+              <label for="mensaje">Cuéntanos más</label>
+              <textarea id="mensaje" name="mensaje" placeholder="Fecha, lugar, cantidad de asistentes, requerimientos especiales…"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary form-submit">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Enviar solicitud
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">KU<span>PU</span>RI</a>
+          <p>Renta profesional de equipo de audio para eventos, cine, teatro y producciones en la Ciudad de México.</p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="Facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="YouTube">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="WhatsApp">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Servicios</h4>
+          <ul>
+            <li><a href="#servicios">Audio para Eventos</a></li>
+            <li><a href="#servicios">Producción Cinematográfica</a></li>
+            <li><a href="#servicios">Teatro y Escénicas</a></li>
+            <li><a href="#servicios">Transmisión en Vivo</a></li>
+            <li><a href="#servicios">Instalaciones</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Marcas</h4>
+          <ul>
+            <li><a href="#">L‑Acoustics</a></li>
+            <li><a href="#">DiGiCo</a></li>
+            <li><a href="#">Shure Axient</a></li>
+            <li><a href="#">Sound Devices</a></li>
+            <li><a href="#">Meyer Sound</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <ul>
+            <li><a href="#">Nosotros</a></li>
+            <li><a href="#">Portafolio</a></li>
+            <li><a href="#proceso">Proceso</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© <span id="year"></span> Kupuri Renta de Audio · Ciudad de México</p>
+        <p>Diseñado con <span style="color:var(--gold)">♥</span> para la industria audiovisual · <a href="#">Aviso de privacidad</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Year ───────────────────────────────────────────
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ─── Navbar scroll ──────────────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // ─── Mobile menu ────────────────────────────────────
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu   = document.getElementById('mobileMenu');
+    const mobileClose  = document.getElementById('mobileClose');
+    hamburgerBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+    mobileClose.addEventListener('click',  () => mobileMenu.classList.remove('open'));
+    document.querySelectorAll('.mobile-link').forEach(link =>
+      link.addEventListener('click', () => mobileMenu.classList.remove('open'))
+    );
+
+    // ─── Generate waveform bars ─────────────────────────
+    const waveform = document.getElementById('waveform');
+    for (let i = 0; i < 80; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'wave-bar';
+      const min = 10 + Math.random() * 20;
+      const max = min + 30 + Math.random() * 80;
+      const dur = 0.8 + Math.random() * 1.6;
+      const del = Math.random() * 2;
+      bar.style.cssText = `--min:${min}px;--max:${max}px;--dur:${dur}s;--delay:${-del}s`;
+      waveform.appendChild(bar);
+    }
+
+    // ─── Mini waveform in audio card ────────────────────
+    const miniWave = document.getElementById('miniWave');
+    const miniHeights = [6,10,18,26,30,22,28,32,20,16,24,28,20,14,8,10,18,22,16,12];
+    miniHeights.forEach((h, i) => {
+      const bar = document.createElement('div');
+      bar.className = 'mini-bar';
+      bar.style.cssText = `--h:${h}px;--dur2:${0.5 + Math.random()}s;--d2:${i * 0.05}s`;
+      miniWave.appendChild(bar);
+    });
+
+    // ─── Mixer channels ─────────────────────────────────
+    const mixerChannels = document.getElementById('mixerChannels');
+    const labels = ['CH1','CH2','CH3','CH4','CH5','CH6','CH7','CH8'];
+    const positions = [80,60,40,70,50,65,45,75];
+    labels.forEach((lbl, i) => {
+      const ch = document.createElement('div');
+      ch.className = 'channel-strip';
+      ch.innerHTML = `
+        <div class="ch-knob"></div>
+        <div class="ch-knob" style="opacity:.6;width:14px;height:14px;"></div>
+        <div class="fader-track">
+          <div class="fader-thumb" style="bottom:${positions[i]}%;"></div>
+        </div>
+        <div class="ch-vu"><div class="ch-vu-fill" style="--vu-max:${40+Math.random()*50}%;--vu-dur:${0.8+Math.random()*1.2}s;animation-delay:${Math.random()*-2}s"></div></div>
+        <div class="ch-label">${lbl}</div>
+      `;
+      mixerChannels.appendChild(ch);
+    });
+
+    // ─── Marquee strip ──────────────────────────────────
+    const marqueeItems = [
+      'L‑Acoustics', 'DiGiCo', 'Shure Axient', 'Sound Devices',
+      'Meyer Sound', 'Allen & Heath', 'Sennheiser', 'QSC',
+      'Crown', 'Lab.gruppen', 'Avid', 'SSL Live'
+    ];
+    const track = document.getElementById('marqueeTrack');
+    // Duplicate for seamless loop
+    [...marqueeItems, ...marqueeItems].forEach(name => {
+      const item = document.createElement('div');
+      item.className = 'marquee-item';
+      item.innerHTML = `<svg width="4" height="4" viewBox="0 0 4 4"><circle cx="2" cy="2" r="2" fill="currentColor"/></svg>${name}`;
+      track.appendChild(item);
+    });
+
+    // ─── Scroll reveal ──────────────────────────────────
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    // 0.12 = trigger reveal when 12% of the element enters the viewport,
+    // giving a subtle "just appeared" feel without waiting for full visibility.
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // NOTE: Form submission is handled client-side only (visual feedback).
+    // Wire up to a backend endpoint (e.g. Formspree, EmailJS, or a custom API)
+    // to send actual messages in production.
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type=submit]');
+      btn.textContent = '✓ ¡Mensaje enviado!';
+      btn.style.background = '#4ade80';
+      btn.style.color = '#07070a';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Enviar solicitud`;
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.disabled = false;
+        e.target.reset();
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
