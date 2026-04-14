@@ -1,0 +1,20 @@
+{
+  "name": "dos2a",
+  "version": "1.0.0",
+  "description": "DOS2A - Audio & Iluminación Premium",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace=frontend\" \"npm run dev --workspace=backend\"",
+    "build": "npm run build --workspace=frontend && npm run build --workspace=backend",
+    "deploy": "npm run deploy --workspace=frontend && npm run deploy --workspace=backend",
+    "type-check": "npm run type-check --workspace=frontend && npm run type-check --workspace=backend",
+    "lint": "npm run lint --workspace=frontend && npm run lint --workspace=backend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
