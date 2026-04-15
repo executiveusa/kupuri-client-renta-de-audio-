@@ -11,7 +11,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         email: {},
         password: {},
       },
-      async authorize(credentials) {
+      async authorize(credentials) { if (!credentials) return null;
         if (credentials.password === process.env.UNIVERSAL_PASSWORD) {
           const user = await prisma.user.findUnique({
             where: { email: credentials.email as string },
@@ -24,7 +24,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async session({ session, user }) {
-      session.user.id = user.id
+      if (session.user) {
+        session.user.id = user.id
+      }
       return session
     },
   },
