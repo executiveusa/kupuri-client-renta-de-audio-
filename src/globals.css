@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: hsl(142, 71%, 45%);
+    --accent: hsl(38, 92%, 50%);
+    --bg-dark: #0a0a0f;
+    --bg-secondary: #1a1a24;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a8;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[var(--bg-dark)] text-[var(--text-primary)] font-sans antialiased;
+  }
+}
