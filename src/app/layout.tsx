@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Providers } from '@/components/providers'
-import './globals.css'
+import '../globals.css'
 
 export const metadata: Metadata = {
   title: 'Kupuri - Audio Equipment Rental CDMX',
